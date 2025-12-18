@@ -1,0 +1,124 @@
+{
+  "characters": [
+    {
+      "id": "c_puffmage_orbi",
+      "name": "Puffmage Orbi",
+      "rarity": 3,
+      "role": "DPS",
+      "element": "Nature",
+      "baseStats": { "hp": 120, "atk": 26, "def": 10, "spd": 100 },
+      "growth": { "hp": 10, "atk": 2.2, "def": 0.8, "spd": 0.1 },
+      "skills": { "basic": "atk_basic", "ult": "ult_sporeburst" }
+    },
+    {
+      "id": "c_barkrot_thane",
+      "name": "Barkrot Thane",
+      "rarity": 4,
+      "role": "Tank",
+      "element": "Rot",
+      "baseStats": { "hp": 190, "atk": 18, "def": 18, "spd": 92 },
+      "growth": { "hp": 16, "atk": 1.6, "def": 1.6, "spd": 0.08 },
+      "skills": { "basic": "atk_basic", "ult": "ult_rotguard" }
+    },
+    {
+      "id": "c_mosswhisper_luma",
+      "name": "Mosswhisper Luma",
+      "rarity": 4,
+      "role": "Healer",
+      "element": "Nature",
+      "baseStats": { "hp": 150, "atk": 16, "def": 12, "spd": 98 },
+      "growth": { "hp": 12, "atk": 1.2, "def": 1.0, "spd": 0.10 },
+      "skills": { "basic": "atk_basic", "ult": "ult_mendglow" }
+    },
+    {
+      "id": "c_shroomblade_rowan",
+      "name": "Shroomblade Rowan",
+      "rarity": 5,
+      "role": "DPS",
+      "element": "Nature",
+      "baseStats": { "hp": 145, "atk": 34, "def": 12, "spd": 104 },
+      "growth": { "hp": 12, "atk": 2.8, "def": 1.0, "spd": 0.12 },
+      "skills": { "basic": "atk_basic", "ult": "ult_sporeburst" }
+    },
+    {
+      "id": "c_mirelord_gloomrot",
+      "name": "Mirelord Gloomrot",
+      "rarity": 5,
+      "role": "Tank",
+      "element": "Rot",
+      "baseStats": { "hp": 220, "atk": 22, "def": 22, "spd": 90 },
+      "growth": { "hp": 18, "atk": 1.8, "def": 1.9, "spd": 0.07 },
+      "skills": { "basic": "atk_basic", "ult": "ult_rotguard" }
+    },
+    {
+      "id": "c_frostcap_serin",
+      "name": "Frostcap Serin",
+      "rarity": 4,
+      "role": "Controller",
+      "element": "Frost",
+      "baseStats": { "hp": 140, "atk": 22, "def": 12, "spd": 102 },
+      "growth": { "hp": 11, "atk": 2.0, "def": 1.0, "spd": 0.12 },
+      "skills": { "basic": "atk_basic", "ult": "ult_freeze" }
+    },
+    {
+      "id": "c_glacierstalk_bronn",
+      "name": "Glacierstalk Bronn",
+      "rarity": 4,
+      "role": "Tank",
+      "element": "Frost",
+      "baseStats": { "hp": 200, "atk": 18, "def": 20, "spd": 90 },
+      "growth": { "hp": 17, "atk": 1.6, "def": 1.8, "spd": 0.06 },
+      "skills": { "basic": "atk_basic", "ult": "ult_rotguard" }
+    },
+    {
+      "id": "c_embercap_rugo",
+      "name": "Embercap Rugo",
+      "rarity": 4,
+      "role": "DPS",
+      "element": "Ember",
+      "baseStats": { "hp": 135, "atk": 30, "def": 11, "spd": 101 },
+      "growth": { "hp": 11, "atk": 2.5, "def": 0.9, "spd": 0.10 },
+      "skills": { "basic": "atk_basic", "ult": "ult_burn" }
+    },
+    {
+      "id": "c_ashmote_kira",
+      "name": "Ashmote Kira",
+      "rarity": 3,
+      "role": "Support",
+      "element": "Ember",
+      "baseStats": { "hp": 130, "atk": 18, "def": 12, "spd": 99 },
+      "growth": { "hp": 10, "atk": 1.5, "def": 1.0, "spd": 0.10 },
+      "skills": { "basic": "atk_basic", "ult": "ult_mendglow" }
+    },
+    {
+      "id": "c_starspore_zenith",
+      "name": "Starspore Zenith",
+      "rarity": 6,
+      "role": "DPS",
+      "element": "Astral",
+      "baseStats": { "hp": 170, "atk": 42, "def": 14, "spd": 106 },
+      "growth": { "hp": 14, "atk": 3.2, "def": 1.1, "spd": 0.14 },
+      "skills": { "basic": "atk_basic", "ult": "ult_sporeburst" }
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e_sporeling",
+      "name": "Sporeling",
+      "baseStats": { "hp": 80, "atk": 16, "def": 8, "spd": 95 },
+      "skills": { "basic": "atk_basic", "ult": "atk_basic" }
+    },
+    {
+      "id": "e_rot_thrall",
+      "name": "Rotbound Thrall",
+      "baseStats": { "hp": 120, "atk": 18, "def": 12, "spd": 90 },
+      "skills": { "basic": "atk_basic", "ult": "ult_rotguard" }
+    },
+    {
+      "id": "e_ashen_spore",
+      "name": "Ashen Spore",
+      "baseStats": { "hp": 95, "atk": 20, "def": 9, "spd": 100 },
+      "skills": { "basic": "atk_basic", "ult": "ult_burn" }
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "banners": [
+    {
+      "id": "b_standard",
+      "name": "Standard Spore Banner",
+      "currency": "spores",
+      "costPerPull": 10,
+      "rates": { "3": 0.78, "4": 0.18, "5": 0.035, "6": 0.005 },
+      "pity": { "guaranteeRarityAt": 50, "guaranteeRarity": 5 }
+    }
+  ]
+}
