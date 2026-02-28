@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Data">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/FunGuy's/Library/Bee/Android/Prj/IL2CPP/Gradle/launcher/build/intermediates/compressed_assets/release/compressReleaseAssets/out/assets/bin/Data/unity_app_guid.jar!/" />
+      <root url="jar://$PROJECT_DIR$/FunGuy's/Library/Bee/Android/Prj/IL2CPP/Gradle/launcher/build/intermediates/compressed_assets/release/compressReleaseAssets/out/assets/bin/Data/boot.config.jar!/" />
+      <root url="jar://$PROJECT_DIR$/FunGuy's/Library/Bee/Android/Prj/IL2CPP/Gradle/launcher/build/intermediates/compressed_assets/release/compressReleaseAssets/out/assets/bin/Data/RuntimeInitializeOnLoads.json.jar!/" />
+      <root url="jar://$PROJECT_DIR$/FunGuy's/Library/Bee/Android/Prj/IL2CPP/Gradle/launcher/build/intermediates/compressed_assets/release/compressReleaseAssets/out/assets/bin/Data/data.unity3d.jar!/" />
+      <root url="jar://$PROJECT_DIR$/FunGuy's/Library/Bee/Android/Prj/IL2CPP/Gradle/launcher/build/intermediates/compressed_assets/release/compressReleaseAssets/out/assets/bin/Data/ScriptingAssemblies.json.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

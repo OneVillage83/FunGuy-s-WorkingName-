@@ -33,7 +33,7 @@
     {
       "id": "c_shroomblade_rowan",
       "name": "Shroomblade Rowan",
-      "rarity": 5,
+      "rarity": 6,
       "role": "DPS",
       "element": "Nature",
       "baseStats": { "hp": 145, "atk": 34, "def": 12, "spd": 104 },

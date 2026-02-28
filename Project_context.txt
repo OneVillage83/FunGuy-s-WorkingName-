@@ -1,0 +1,217 @@
+FunGuy’s Project Context- first draft
+One-liner
+
+FunGuy’s is a mobile-first RPG / strategy / gacha (“gotcha”) game where collectible fungal characters form teams with formation + synergy bonuses to beat AI/PvE content, with long-term plans for guilds, skins, events, and eventually PC support.
+
+Product Vision
+Core fantasy
+
+Collect a roster of fungi heroes (humanoid or creature-style TBD), build synergistic teams, and climb increasingly difficult content through smart composition, upgrades, and long-term progression.
+
+North-star goals
+
+Strategy matters (formation, synergy, statuses, counters)
+
+Content is data-driven (easy to add new characters/skills/enemies without code changes)
+
+Mobile-first, but architected to port to PC later (Unity multi-platform)
+
+Current Design Pillars
+Gameplay pillars
+
+Team formation & synergy: specific combinations (roles/elements/biomes/traits) boost performance.
+
+Element / status system (not finalized): initial placeholder elements used in data (Nature/Rot/Frost/Ember/Astral).
+
+PvE progression: stages → waves → rewards → stronger teams.
+
+Gacha: banners, rates, pity. Odds must be visible for store compliance.
+
+Long-term features (planned): guilds, guild bosses/raids, cosmetics/skins, seasonal events.
+
+Differentiator
+
+Fungi as a theme enables unique mechanics:
+
+Mutation / traits (future): evolving traits rather than flat “ascension”
+
+Symbiosis pair bonuses
+
+Biome identity (forest, swamp, volcanic, arctic, urban mold, cosmic)
+
+Enemy Worldbuilding
+
+You have a defined direction for enemy content via 10 enemy factions (examples: Rotbound Legion, Cordyceps Dominion, Ashen Bloom, Pale Mycelium, etc.), designed to support:
+
+Chapter progression
+
+Event rotations
+
+Guild raids
+
+Endgame “rule-breaking” bosses
+
+Team Roles & Responsibilities
+Garrett (Design / Art)
+
+Character design (fungi roster: silhouettes → final art)
+
+Naming, visual identity, skins
+
+Faction visuals, enemy designs
+
+You (Engineering / Tech Lead)
+
+Unity project framework
+
+Data pipeline (JSON-driven content)
+
+Battle simulator + UI flow
+
+Save system
+
+Build pipeline (Android first)
+
+Git + Git LFS asset workflow
+
+Tech Stack & Workflow
+Engine & tools
+
+Unity: main engine (mobile-first, later PC export)
+
+VS Code: C# scripting
+
+Android Studio: SDK/ADB/emulator + Logcat debugging
+
+Git + Git LFS: repo + large assets
+
+Repo shape (current)
+
+Unity project is inside the repo (folder contains Assets/, Packages/, ProjectSettings/)
+
+Data-driven content stored as JSON under Resources/GameData/ (MVP approach)
+
+Core scripts organized under Assets/_Game/Scripts/...
+
+Git hygiene (resolved)
+
+Unity junk (Library/, Temp/, etc.) removed from tracking and purged from history using git-filter-repo.
+
+Git LFS enabled for large binaries (audio/video/images/models).
+
+Android emulator build-and-run confirmed working.
+
+Game Architecture (Current)
+Boot flow
+
+Boot scene runs Bootloader.cs:
+
+Loads JSON content into Game.Data
+
+Loads/creates local save into Game.Save
+
+Initializes services like Game.Gacha
+
+Auto-routes to Home
+
+Data-driven content (MVP)
+
+characters.json: characters + enemies (defs)
+
+skills.json: skills + effect lists
+
+stages.json: stage waves + rewards
+
+banners.json: gacha banners, rates, pity
+
+Systems implemented (framework level)
+
+Data load (Resources TextAssets)
+
+Local save (PlayerPrefs JSON)
+
+Gacha service (rates + pity)
+
+Battle sim skeleton (speed-based turns, basic effects/statuses)
+
+Scene skeleton: Boot, Home, Summon, Team, Battle (navigation framework underway)
+
+Current Status
+✅ Completed / Working
+
+Boot scene loads successfully (“data loaded + save loaded”)
+
+Android toolchain configured; emulator Build And Run succeeded
+
+Repo successfully pushed after cleanup; LFS in place
+
+🟡 In progress
+
+Scene navigation/UI skeleton (Home → Summon/Team/Battle → Back)
+
+Minimal UI for Summon/Team/Battle screens (functional buttons and display)
+
+Immediate Roadmap
+Day 1 (Project setup) — finishing touches
+
+Confirm scene list in build profiles (Boot index 0)
+
+Home UI with nav buttons
+
+Back buttons in Summon/Team/Battle
+
+Optional: basic debug UI + logs
+
+Day 2 (Data + Save verification)
+
+Summon screen UI:
+
+Pull 1 / Pull 10
+
+Show pulled character name/rarity
+
+Deduct currency + save
+
+Inventory list UI
+
+Basic team selection (choose 5)
+
+Day 3–4 (Battle MVP)
+
+Battle scene that:
+
+Builds player team from save
+
+Builds enemy wave from stage data
+
+Runs BattleSim
+
+Displays win/lose + rewards
+
+Next milestones
+
+Equipment/items (optional)
+
+More statuses + targeting rules
+
+Synergy system hooks (formation bonuses)
+
+Guild system (later)
+
+Live ops support (later): remote config, server-side gacha, analytics
+
+Store/Compliance Notes (Mobile Gacha)
+
+If you sell randomized pulls: display rates in-app (Google Play + Apple requirement)
+
+Privacy policy + Terms recommended before public release
+
+Android first is a good plan; iOS second once stable
+
+Naming & Branding (Working)
+
+Working repo name: FunGuy’s (Working Name)
+
+Final name TBD (keep package name stable once chosen)
+
+** "Funguy's Stat sheet" takes precedent over any other file. **

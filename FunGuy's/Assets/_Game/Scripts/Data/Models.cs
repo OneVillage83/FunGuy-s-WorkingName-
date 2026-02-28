@@ -1,8 +1,21 @@
 using System;
 using System.Collections.Generic;
 
-[Serializable] public class StatBlock { public int hp; public int atk; public int def; public int spd; }
-[Serializable] public class StatGrowth { public float hp; public float atk; public float def; public float spd; }
+[Serializable] public class StatBlock {
+  public int hp;
+  public int atk;
+  public int def;
+  public int spd;
+  public int pot;
+}
+
+[Serializable] public class StatGrowth {
+  public float hp;
+  public float atk;
+  public float def;
+  public float spd;
+  public float pot;
+}
 
 [Serializable] public class SkillRefs { public string basic; public string ult; }
 
@@ -10,8 +23,13 @@ using System.Collections.Generic;
   public string id;
   public string name;
   public int rarity;
+  public string rarityTier;
+  public string biome;
+  public string classArchetype;
   public string role;
   public string element;
+  public int bst;
+  public List<string> synergyTags;
   public StatBlock baseStats;
   public StatGrowth growth;
   public SkillRefs skills;
@@ -20,6 +38,9 @@ using System.Collections.Generic;
 [Serializable] public class EnemyDef {
   public string id;
   public string name;
+  public string biome;
+  public string classArchetype;
+  public string role;
   public StatBlock baseStats;
   public SkillRefs skills;
 }
@@ -38,6 +59,7 @@ using System.Collections.Generic;
   public string name;
   public string target;    // EnemyFront, AllEnemies, AllAllies, RandomEnemy2, Self
   public int cooldown;     // turns
+  public int energyCost;   // 0 for basic, 100 for signature by default
   public List<EffectDef> effects;
 }
 
@@ -51,16 +73,30 @@ using System.Collections.Generic;
   public RewardDef rewards;
 }
 
-[Serializable] public class RatesDef { public float _3; public float _4; public float _5; public float _6; } // optional alt
-[Serializable] public class BannerRates { public float _3; public float _4; public float _5; public float _6; }
-[Serializable] public class PityDef { public int guaranteeRarityAt; public int guaranteeRarity; }
+[Serializable] public class RateEntry {
+  public int rarity;
+  public float rate;
+}
+
+[Serializable] public class PityDef {
+  public int guaranteeRarityAt; // legacy hard pity threshold
+  public int guaranteeRarity;   // legacy guaranteed rarity
+  public int softPityStart;     // e.g. 74
+  public int hardPity;          // e.g. 90
+  public int featuredRarity;    // rarity gated by 50/50 logic
+}
+
 [Serializable] public class BannerDef {
   public string id;
   public string name;
+  public string bannerType; // standard_character, limited_character
   public string currency;
   public int costPerPull;
-  public Dictionary<string, float> rates; // "3":0.78 ...
+  public List<RateEntry> rates;
   public PityDef pity;
+  public float featuredRateUp; // 0.5 for Genshin-like 50/50
+  public bool carryFeaturedGuarantee;
+  public List<string> featuredCharacterIds;
 }
 
 [Serializable] public class CharactersFile { public List<CharacterDef> characters; public List<EnemyDef> enemies; }

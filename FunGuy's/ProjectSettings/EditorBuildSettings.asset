@@ -5,9 +5,31 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
+  - enabled: 1
+    path: Assets/Scenes/Boot.unity
+    guid: 519cc436cc3e81b43b353481e95e9747
+  - enabled: 1
+    path: Assets/Scenes/Home.unity
+    guid: 5e13e8b372874e542af598f26e4eebba
+  - enabled: 1
+    path: Assets/Scenes/Options.unity
+    guid: a3a2f0fbc2457094b8490098c456d5cf
+  - enabled: 1
+    path: Assets/Scenes/Tutorial.unity
+    guid: a1b318dfc09a4b64ebf5b68b574f2cc8
+  - enabled: 1
+    path: Assets/Scenes/Summon.unity
+    guid: 61496c2527e96f84a84c3d810eb402f0
+  - enabled: 1
+    path: Assets/Scenes/Team.unity
+    guid: f8759aa51557b3143b7aafdcd32edf13
+  - enabled: 1
+    path: Assets/Scenes/Battle.unity
+    guid: 0b321f6f0ce2ac840ae90a089e9d8738
   m_configObjects:
+    com.unity.dt.app-ui: {fileID: 11400000, guid: 1b1c20d82303e4b5781c3ef50ac1449f, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

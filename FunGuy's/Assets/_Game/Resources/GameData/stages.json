@@ -5,7 +5,8 @@
       "name": "Meadow Edge",
       "recommendedPower": 200,
       "waves": [
-        [{ "enemyId": "e_sporeling", "level": 1 }, { "enemyId": "e_sporeling", "level": 1 }, { "enemyId": "e_sporeling", "level": 1 }]
+        [{ "enemyId": "e_sporeling", "level": 1 }, { "enemyId": "e_sporeling", "level": 1 }],
+        [{ "enemyId": "e_sporeling", "level": 1 }, { "enemyId": "e_sporeling", "level": 2 }, { "enemyId": "e_sporeling", "level": 1 }]
       ],
       "rewards": { "gold": 50, "spores": 10, "accountXp": 5 }
     },
@@ -14,7 +15,8 @@
       "name": "Rotwood Path",
       "recommendedPower": 260,
       "waves": [
-        [{ "enemyId": "e_rot_thrall", "level": 2 }, { "enemyId": "e_sporeling", "level": 2 }, { "enemyId": "e_sporeling", "level": 2 }]
+        [{ "enemyId": "e_rot_thrall", "level": 2 }, { "enemyId": "e_sporeling", "level": 2 }],
+        [{ "enemyId": "e_rot_thrall", "level": 2 }, { "enemyId": "e_sporeling", "level": 2 }, { "enemyId": "e_sporeling", "level": 3 }]
       ],
       "rewards": { "gold": 65, "spores": 12, "accountXp": 6 }
     },
@@ -23,9 +25,31 @@
       "name": "Cinder Drift",
       "recommendedPower": 320,
       "waves": [
-        [{ "enemyId": "e_ashen_spore", "level": 3 }, { "enemyId": "e_sporeling", "level": 3 }, { "enemyId": "e_ashen_spore", "level": 3 }]
+        [{ "enemyId": "e_ashen_spore", "level": 3 }, { "enemyId": "e_sporeling", "level": 3 }],
+        [{ "enemyId": "e_ashen_spore", "level": 3 }, { "enemyId": "e_rot_thrall", "level": 3 }, { "enemyId": "e_ashen_spore", "level": 3 }]
       ],
       "rewards": { "gold": 80, "spores": 15, "accountXp": 7 }
+    },
+    {
+      "id": "s_1_4",
+      "name": "Molded Crossing",
+      "recommendedPower": 380,
+      "waves": [
+        [{ "enemyId": "e_rot_thrall", "level": 4 }, { "enemyId": "e_ashen_spore", "level": 4 }],
+        [{ "enemyId": "e_rot_thrall", "level": 4 }, { "enemyId": "e_sporeling", "level": 4 }, { "enemyId": "e_ashen_spore", "level": 4 }]
+      ],
+      "rewards": { "gold": 95, "spores": 18, "accountXp": 8 }
+    },
+    {
+      "id": "s_1_5",
+      "name": "Rotbound Gate",
+      "recommendedPower": 450,
+      "waves": [
+        [{ "enemyId": "e_rot_thrall", "level": 5 }, { "enemyId": "e_rot_thrall", "level": 5 }],
+        [{ "enemyId": "e_ashen_spore", "level": 5 }, { "enemyId": "e_sporeling", "level": 5 }, { "enemyId": "e_ashen_spore", "level": 5 }],
+        [{ "enemyId": "e_rot_thrall", "level": 6 }]
+      ],
+      "rewards": { "gold": 120, "spores": 22, "accountXp": 10 }
     }
   ]
 }

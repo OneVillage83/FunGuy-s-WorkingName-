@@ -3,10 +3,48 @@
     {
       "id": "b_standard",
       "name": "Standard Spore Banner",
+      "bannerType": "standard_character",
       "currency": "spores",
       "costPerPull": 10,
-      "rates": { "3": 0.78, "4": 0.18, "5": 0.035, "6": 0.005 },
-      "pity": { "guaranteeRarityAt": 50, "guaranteeRarity": 5 }
+      "rates": [
+        { "rarity": 3, "rate": 0.78 },
+        { "rarity": 4, "rate": 0.18 },
+        { "rarity": 5, "rate": 0.035 },
+        { "rarity": 6, "rate": 0.005 }
+      ],
+      "pity": {
+        "guaranteeRarityAt": 80,
+        "guaranteeRarity": 5,
+        "softPityStart": 65,
+        "hardPity": 80,
+        "featuredRarity": 5
+      },
+      "featuredRateUp": 1.0,
+      "carryFeaturedGuarantee": false,
+      "featuredCharacterIds": []
+    },
+    {
+      "id": "b_event_starspore",
+      "name": "Starseed Bloom Event Banner",
+      "bannerType": "limited_character",
+      "currency": "spores",
+      "costPerPull": 10,
+      "rates": [
+        { "rarity": 3, "rate": 0.79 },
+        { "rarity": 4, "rate": 0.15 },
+        { "rarity": 5, "rate": 0.054 },
+        { "rarity": 6, "rate": 0.006 }
+      ],
+      "pity": {
+        "guaranteeRarityAt": 90,
+        "guaranteeRarity": 6,
+        "softPityStart": 74,
+        "hardPity": 90,
+        "featuredRarity": 6
+      },
+      "featuredRateUp": 0.5,
+      "carryFeaturedGuarantee": true,
+      "featuredCharacterIds": [ "c_starspore_zenith" ]
     }
   ]
 }

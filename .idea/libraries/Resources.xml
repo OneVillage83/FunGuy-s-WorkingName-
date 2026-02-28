@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Resources">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/FunGuy's/Library/Bee/Android/Prj/IL2CPP/Gradle/launcher/build/intermediates/compressed_assets/release/compressReleaseAssets/out/assets/bin/Data/Managed/Resources/System.Drawing.dll-resources.dat.jar!/" />
+      <root url="jar://$PROJECT_DIR$/FunGuy's/Library/Bee/Android/Prj/IL2CPP/Gradle/launcher/build/intermediates/compressed_assets/release/compressReleaseAssets/out/assets/bin/Data/Managed/Resources/System.Data.dll-resources.dat.jar!/" />
+      <root url="jar://$PROJECT_DIR$/FunGuy's/Library/Bee/Android/Prj/IL2CPP/Gradle/launcher/build/intermediates/compressed_assets/release/compressReleaseAssets/out/assets/bin/Data/Managed/Resources/mscorlib.dll-resources.dat.jar!/" />
+      <root url="jar://$PROJECT_DIR$/FunGuy's/Library/Bee/Android/Prj/IL2CPP/Gradle/launcher/build/intermediates/compressed_assets/release/compressReleaseAssets/out/assets/bin/Data/Managed/Resources/Newtonsoft.Json.dll-resources.dat.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

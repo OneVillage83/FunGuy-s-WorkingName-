@@ -5,6 +5,7 @@
       "name": "Basic Attack",
       "target": "EnemyFront",
       "cooldown": 0,
+      "energyCost": 0,
       "effects": [{ "type": "Damage", "scale": 1.0 }]
     },
     {
@@ -12,6 +13,7 @@
       "name": "Sporeburst",
       "target": "AllEnemies",
       "cooldown": 3,
+      "energyCost": 100,
       "effects": [{ "type": "Damage", "scale": 0.75 }, { "type": "ApplyStatus", "status": "Poison", "chance": 0.35, "duration": 2, "potency": 0.06 }]
     },
     {
@@ -19,6 +21,7 @@
       "name": "Rotguard",
       "target": "Self",
       "cooldown": 3,
+      "energyCost": 100,
       "effects": [{ "type": "Shield", "scale": 0.25 }, { "type": "ApplyStatus", "status": "Thorns", "chance": 1.0, "duration": 2, "potency": 0.20 }]
     },
     {
@@ -26,6 +29,7 @@
       "name": "Mendglow",
       "target": "AllAllies",
       "cooldown": 3,
+      "energyCost": 100,
       "effects": [{ "type": "Heal", "scale": 0.35 }, { "type": "ApplyStatus", "status": "Regen", "chance": 1.0, "duration": 2, "potency": 0.05 }]
     },
     {
@@ -33,6 +37,7 @@
       "name": "Cryo Spores",
       "target": "RandomEnemy2",
       "cooldown": 3,
+      "energyCost": 100,
       "effects": [{ "type": "Damage", "scale": 0.60 }, { "type": "ApplyStatus", "status": "Freeze", "chance": 0.30, "duration": 1, "potency": 0.0 }]
     },
     {
@@ -40,6 +45,7 @@
       "name": "Flare Bloom",
       "target": "AllEnemies",
       "cooldown": 3,
+      "energyCost": 100,
       "effects": [{ "type": "Damage", "scale": 0.70 }, { "type": "ApplyStatus", "status": "Burn", "chance": 0.40, "duration": 2, "potency": 0.06 }]
     }
   ]

@@ -3,38 +3,52 @@ using System.Collections.Generic;
 using System.Linq;
 
 public class BattleSim {
-  private readonly GameData _data;
-  private readonly Random _rng = new();
+  private const float ActionGaugeThreshold = 1000f;
+  private const float DefenseConstant = 3000f;
+  private const int StartTurnEnergyGain = 20;
+  private const int DealDamageEnergyGain = 5;
+  private const int TakeDamageEnergyGain = 10;
+  private const int KillEnergyGain = 15;
 
-  public BattleSim(GameData data) { _data = data; }
+  private readonly GameData _data;
+  private readonly Random _rng;
+
+  public BattleSim(GameData data) : this(data, rng: null) { }
+
+  public BattleSim(GameData data, int seed) : this(data, new Random(seed)) { }
+
+  public BattleSim(GameData data, Random rng) {
+    _data = data;
+    _rng = rng ?? new Random();
+  }
 
   public bool RunBattle(List<CombatUnit> player, List<CombatUnit> enemy, int maxTurns = 200) {
     int turn = 0;
 
     while (turn++ < maxTurns && AnyAlive(player) && AnyAlive(enemy)) {
-      var all = player.Concat(enemy).Where(u => u.hp > 0).OrderByDescending(u => u.spd).ToList();
+      var actor = NextActor(player, enemy);
+      if (actor == null) break;
+      if (actor.hp <= 0) continue;
 
-      foreach (var actor in all) {
-        if (actor.hp <= 0) continue;
+      actor.actionGauge = Math.Max(0f, actor.actionGauge - ActionGaugeThreshold);
+      GainEnergy(actor, StartTurnEnergyGain);
+      TickUltCooldown(actor);
 
-        // tick start-of-turn statuses (regen, poison, burn, freeze)
-        if (ApplyStartOfTurnStatuses(actor)) {
-          // if Freeze consumed their turn, skip
-          continue;
-        }
+      bool turnSkipped = ApplyStartOfTurnStatuses(actor);
+      if (turnSkipped) continue;
 
-        var opponents = actor.side == TeamSide.Player ? enemy : player;
-        var allies    = actor.side == TeamSide.Player ? player : enemy;
+      var opponents = actor.side == TeamSide.Player ? enemy : player;
+      var allies = actor.side == TeamSide.Player ? player : enemy;
+      if (!AnyAlive(opponents)) break;
 
-        // choose skill: ult if ready, else basic
-        string skillId = actor.ultCdRemaining <= 0 ? actor.ultSkillId : actor.basicSkillId;
-        if (skillId == actor.ultSkillId) actor.ultCdRemaining = _data.Skills[skillId].cooldown;
-        else actor.ultCdRemaining = Math.Max(0, actor.ultCdRemaining - 1);
+      if (!TrySelectSkill(actor, out var selectedSkill, out bool usedUlt)) continue;
 
-        ExecuteSkill(actor, allies, opponents, _data.Skills[skillId]);
-
-        if (!AnyAlive(player) || !AnyAlive(enemy)) break;
+      if (usedUlt) {
+        SpendEnergy(actor, selectedSkill.energyCost > 0 ? selectedSkill.energyCost : actor.maxEnergy);
+        actor.ultCdRemaining = Math.Max(0, selectedSkill.cooldown);
       }
+
+      ExecuteSkill(actor, allies, opponents, selectedSkill);
     }
 
     return AnyAlive(player) && !AnyAlive(enemy);
@@ -42,29 +56,83 @@ public class BattleSim {
 
   private bool AnyAlive(List<CombatUnit> team) => team.Any(u => u.hp > 0);
 
+  private CombatUnit NextActor(List<CombatUnit> player, List<CombatUnit> enemy) {
+    var alive = player.Concat(enemy).Where(u => u.hp > 0).ToList();
+    if (alive.Count == 0) return null;
+
+    float highestGauge = alive.Max(u => u.actionGauge);
+    if (highestGauge < ActionGaugeThreshold) {
+      int ticks = alive
+        .Select(u => TicksUntilAction(u))
+        .DefaultIfEmpty(1)
+        .Min();
+
+      foreach (var unit in alive) {
+        unit.actionGauge += Math.Max(1, unit.spd) * ticks;
+      }
+    }
+
+    return alive
+      .OrderByDescending(u => u.actionGauge)
+      .ThenByDescending(u => u.spd)
+      .ThenBy(u => u.side)
+      .FirstOrDefault();
+  }
+
+  private static int TicksUntilAction(CombatUnit unit) {
+    int speed = Math.Max(1, unit.spd);
+    float needed = Math.Max(0f, ActionGaugeThreshold - unit.actionGauge);
+    return Math.Max(1, (int)Math.Ceiling(needed / speed));
+  }
+
+  private static void TickUltCooldown(CombatUnit unit) {
+    if (unit.ultCdRemaining > 0) unit.ultCdRemaining -= 1;
+  }
+
+  private bool TrySelectSkill(CombatUnit actor, out SkillDef selectedSkill, out bool usedUlt) {
+    selectedSkill = null;
+    usedUlt = false;
+
+    _ = _data.Skills.TryGetValue(actor.basicSkillId, out var basicSkill);
+    _ = _data.Skills.TryGetValue(actor.ultSkillId, out var ultSkill);
+    if (basicSkill == null && ultSkill == null) return false;
+
+    bool silenced = HasStatus(actor, "Silence");
+    bool canCastUlt = !silenced &&
+      ultSkill != null &&
+      actor.ultCdRemaining <= 0 &&
+      actor.energy >= Math.Max(0, ultSkill.energyCost);
+
+    selectedSkill = canCastUlt ? ultSkill : basicSkill ?? ultSkill;
+    usedUlt = canCastUlt;
+    return selectedSkill != null;
+  }
+
   private bool ApplyStartOfTurnStatuses(CombatUnit u) {
-    bool frozen = false;
+    bool skipTurn = false;
 
     foreach (var s in u.statuses.ToList()) {
-      if (s.status == "Regen") {
-        Heal(u, (int)MathF.Round(u.maxHp * s.potency));
+      int stacks = Math.Max(1, s.stacks);
+      string status = (s.status ?? string.Empty).Trim().ToLowerInvariant();
+
+      if (status == "regen") Heal(u, (int)MathF.Round(u.maxHp * s.potency * stacks));
+      if (status == "poison" || status == "burn" || status == "bleed") {
+        int dot = (int)MathF.Round(u.maxHp * s.potency * stacks);
+        DealPure(u, dot);
       }
-      if (s.status == "Poison" || s.status == "Burn") {
-        DealPure(u, (int)MathF.Round(u.maxHp * s.potency));
-      }
-      if (s.status == "Freeze") {
-        frozen = true;
-      }
+      if (status == "freeze" || status == "stun") skipTurn = true;
 
       s.remainingTurns -= 1;
       if (s.remainingTurns <= 0) u.statuses.Remove(s);
     }
 
-    return frozen; // if frozen, skip action
+    return skipTurn;
   }
 
   private void ExecuteSkill(CombatUnit actor, List<CombatUnit> allies, List<CombatUnit> enemies, SkillDef skill) {
     var targets = SelectTargets(skill.target, actor, allies, enemies);
+    if (targets.Count == 0 || skill.effects == null) return;
+
     foreach (var eff in skill.effects) {
       foreach (var t in targets) ApplyEffect(actor, t, allies, enemies, eff);
     }
@@ -85,17 +153,23 @@ public class BattleSim {
   }
 
   private void ApplyEffect(CombatUnit actor, CombatUnit target, List<CombatUnit> allies, List<CombatUnit> enemies, EffectDef eff) {
+    if (target.hp <= 0) return;
+
     float roll = (float)_rng.NextDouble();
-    if (eff.type == "ApplyStatus" && roll > eff.chance) return;
+    if (eff.type == "ApplyStatus" && roll > EffectiveStatusChance(actor, target, eff)) return;
 
     switch (eff.type) {
       case "Damage": {
         int dmg = CalcDamage(actor, target, eff.scale);
-        DealDamage(target, dmg);
+        var result = DealDamage(target, dmg);
+        if (result.totalDamage > 0) {
+          GainEnergy(target, TakeDamageEnergyGain);
+          GainEnergy(actor, result.killed ? KillEnergyGain : DealDamageEnergyGain);
+        }
         break;
       }
       case "Heal": {
-        int amt = (int)MathF.Round(actor.atk * eff.scale);
+        int amt = (int)MathF.Round(Math.Max(1, actor.pot) * eff.scale);
         Heal(target, amt);
         break;
       }
@@ -105,38 +179,119 @@ public class BattleSim {
         break;
       }
       case "ApplyStatus": {
-        target.statuses.Add(new StatusInstance {
-          status = eff.status,
-          remainingTurns = eff.duration,
-          potency = eff.potency
-        });
+        ApplyStatus(target, eff);
         break;
       }
     }
   }
 
-  private int CalcDamage(CombatUnit a, CombatUnit d, float scale) {
-    // MVP formula: (ATK*scale) - DEF*0.5, min 1
-    float raw = a.atk * scale;
-    float mitigated = raw - (d.def * 0.5f);
-    return Math.Max(1, (int)MathF.Round(mitigated));
+  private float EffectiveStatusChance(CombatUnit actor, CombatUnit target, EffectDef eff) {
+    float baseChance = eff.chance <= 0 ? 1f : eff.chance;
+    float potencyBonus = Math.Max(0, actor.pot) / 1000f;
+    float resistance = Math.Max(0, target.pot) / 2000f;
+    return Clamp01(baseChance + potencyBonus - resistance);
   }
 
-  private void DealDamage(CombatUnit t, int dmg) {
+  private void ApplyStatus(CombatUnit target, EffectDef eff) {
+    string name = eff.status ?? string.Empty;
+    if (string.IsNullOrWhiteSpace(name)) return;
+
+    bool stackable = IsStackableStatus(name);
+    var existing = target.statuses.FirstOrDefault(s => string.Equals(s.status, name, StringComparison.OrdinalIgnoreCase));
+
+    if (existing == null || stackable) {
+      if (existing != null && stackable) {
+        existing.stacks = Math.Max(1, existing.stacks) + 1;
+        existing.remainingTurns = Math.Max(existing.remainingTurns, eff.duration);
+        existing.potency += eff.potency;
+      } else {
+        target.statuses.Add(new StatusInstance {
+          status = name,
+          remainingTurns = Math.Max(1, eff.duration),
+          potency = eff.potency,
+          stacks = 1,
+        });
+      }
+      return;
+    }
+
+    existing.remainingTurns = Math.Max(existing.remainingTurns, eff.duration);
+    existing.potency = Math.Max(existing.potency, eff.potency);
+  }
+
+  private static bool IsStackableStatus(string status) {
+    string key = (status ?? string.Empty).Trim().ToLowerInvariant();
+    return key == "poison" || key == "burn" || key == "bleed" || key == "regen";
+  }
+
+  private bool HasStatus(CombatUnit unit, string status) {
+    return unit.statuses.Any(s => string.Equals(s.status, status, StringComparison.OrdinalIgnoreCase));
+  }
+
+  private int CalcDamage(CombatUnit a, CombatUnit d, float scale) {
+    float raw = a.atk * scale;
+    float mitigated = raw * (DefenseConstant / (DefenseConstant + Math.Max(0, d.def)));
+    float biomeMultiplier = BiomeMultiplier(a.biome, d.biome);
+    return Math.Max(1, (int)MathF.Round(mitigated * biomeMultiplier));
+  }
+
+  private (int totalDamage, bool killed) DealDamage(CombatUnit t, int dmg) {
+    int before = t.hp + t.shield;
     if (t.shield > 0) {
       int absorbed = Math.Min(t.shield, dmg);
       t.shield -= absorbed;
       dmg -= absorbed;
     }
     if (dmg > 0) t.hp = Math.Max(0, t.hp - dmg);
+
+    int after = t.hp + t.shield;
+    int dealt = Math.Max(0, before - after);
+    return (dealt, t.hp <= 0);
   }
 
   private void DealPure(CombatUnit t, int dmg) {
-    // pure ignores DEF but still hits shield
-    DealDamage(t, dmg);
+    _ = DealDamage(t, Math.Max(1, dmg));
   }
 
   private void Heal(CombatUnit t, int amt) {
     t.hp = Math.Min(t.maxHp, t.hp + Math.Max(0, amt));
+  }
+
+  private static float BiomeMultiplier(string attackerBiome, string defenderBiome) {
+    string attacker = NormalizeBiome(attackerBiome);
+    string defender = NormalizeBiome(defenderBiome);
+
+    if (attacker == "kitchen" || defender == "kitchen") return 1f;
+    if (HasAdvantage(attacker, defender)) return 1.5f;
+    if (HasAdvantage(defender, attacker)) return 0.75f;
+    return 1f;
+  }
+
+  private static bool HasAdvantage(string attacker, string defender) {
+    return attacker switch {
+      "forest" => defender == "wetlands",
+      "wetlands" => defender == "decay",
+      "decay" => defender == "tundra",
+      "tundra" => defender == "forest",
+      _ => false,
+    };
+  }
+
+  private static string NormalizeBiome(string biome) {
+    return (biome ?? string.Empty).Trim().ToLowerInvariant();
+  }
+
+  private static void GainEnergy(CombatUnit unit, int amount) {
+    unit.energy = Math.Min(unit.maxEnergy, unit.energy + Math.Max(0, amount));
+  }
+
+  private static void SpendEnergy(CombatUnit unit, int amount) {
+    unit.energy = Math.Max(0, unit.energy - Math.Max(0, amount));
+  }
+
+  private static float Clamp01(float value) {
+    if (value < 0f) return 0f;
+    if (value > 1f) return 1f;
+    return value;
   }
 }
