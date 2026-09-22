@@ -44,7 +44,7 @@ Because old placeholder player IDs and old placeholder enemy IDs are no longer c
 
 Historical 2026-09-15 evidence (122/122 EditMode, 9/9 PlayMode and the Android emulator chapter route) belongs to the previous ten-character/legacy-enemy content and is **not** a validation claim for this roster-backed campaign.
 
-For the current source, repository-level static checks must establish that all 71 character definitions parse, all skill references resolve, the legacy enemy array is empty, every campaign wave points to an existing roster character, wave slots are unique and all seven stages retain valid rewards/unlock order. The next runtime gate is a clean import under the pinned **Unity 6000.3.2f1**, followed by the full EditMode/PlayMode suites and a fresh campaign balance pass.
+Repository-level static validation passed for the current source: 71 unique character definitions parse, all character skill references resolve, the legacy enemy array is empty, all 14 waves point only to existing roster characters, no retired enemy IDs/skills remain in bundled runtime data, explicit wave slots are unique, and all seven stage IDs/reward structures remain valid. The next runtime gate is a clean import under the pinned **Unity 6000.3.2f1**, followed by the full EditMode/PlayMode suites and a fresh campaign balance pass.
 
 Until that runtime pass is completed, the new opponent levels and final encounter should be treated as functional provisional content. Do not tune final economy or difficulty from the previous ten-character balance results.
 
